@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		8E747D0E1CA300E30079AA4A /* HPC-Q4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "HPC-Q4"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E747D111CA300E30079AA4A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		8E747D181CA3011A0079AA4A /* TriMatrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TriMatrix.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				8E747D111CA300E30079AA4A /* main.cpp */,
+				8E747D181CA3011A0079AA4A /* TriMatrix.h */,
 			);
 			path = "HPC-Q4";
 			sourceTree = "<group>";
