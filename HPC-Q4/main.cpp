@@ -10,6 +10,7 @@
 #include <vector>
 #include <math.h>
 #include "TriMatrix.h"
+#include <Accelerate/Accelerate.h>
 using namespace std;
 
 int main() {
