@@ -17,10 +17,10 @@ int main() {
     
     // INPUTS
     double L=1;
-    int Nx=20;
-    double T=5;
-    double Nt=5000;
-    double alpha=1;
+    int Nx=10000;
+    double T=0.01;
+    double Nt=2000;
+    double alpha=0.001;
     
     // INITIAL CALCULATIONS
     double dt=T/Nt;
@@ -46,12 +46,15 @@ int main() {
     //IMPLICIT TIME INTEGRATION
     double arg=0.5;
     TriMatrix ML(-arg*v,Nx+1);
+    ML.LU();
     TriMatrix MR((1-arg)*v,Nx+1);
+    MR.array();
     double *u0new;
     u0new=new double[Nx+1];
     for (int i=0;i<Nt;i++){
         u0new=ML/(MR*u0);
         u0=u0new;
+        cout<<i<<endl;
     }
     
     //OUTPUT RESULTS

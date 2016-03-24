@@ -19,8 +19,8 @@ using namespace std;
 class TriMatrix{
     
 private:
-    double *diagm, *diagu, *diagl, *A;
-    int s;
+    double *diagm,*diagu,*diagl,*A,*M,*U,*L,*U2;
+    int s, *ipiv;
     
 public:
     TriMatrix(double v,int S){
@@ -48,7 +48,10 @@ public:
         }
         s=S;
         
-        //Convert all column vectors of TriMatrix into array A
+    }
+
+    //Function: Convert all column vectors of TriMatrix into array A for multiplitcation
+    void array(){
         A=new double [s*s];
         //First column vector
         A[0]=diagm[0];
@@ -66,22 +69,38 @@ public:
     
     //Operator Overload: Calculate Multiplication of TriMatrix to Vector X
     double *operator* (double *X){
-        double B[s];
+        double *B;
+        B = new double[s];
         double alpha=1;
-        double beta=1;
-        
+        double beta=0;
         cblas_dgemv(CblasColMajor,CblasNoTrans,s,s,alpha,A,s,X,1,beta,B,1);
         return B;
     }
     
+    //Function: LU Decomposition of TriMatrix for solve operation
+    void LU(){
+        M=new double [s];
+        U=new double [s];
+        L=new double [s];
+        copy(diagm,diagm+s,M);
+        copy(diagu,diagu+s,U);
+        copy(diagl,diagl+s,L);
+        ipiv=new int [s];
+        U2=new double [s-2];
+        int info;
+        //LU Decomposition of TriMatrix
+        dgttrf_(&s,L,M,U,U2,ipiv,&info);
+
+    }
+    
     //Operator Overload: Matrix-Vector Solve Operation
     double *operator/ (double *B){
-        
-        //LU Decomposition of TriMatrix
-        dgttrf
-        
-        dgttrs
-        return X;
+        //Solve System
+        int nrhs = 1;
+        char trans = 'N';
+        int info;
+        dgttrs_(&trans,&s,&nrhs,L,M,U,U2,ipiv,B,&s,&info);
+        return B;
     }
     
 };
