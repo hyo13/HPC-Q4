@@ -23,34 +23,34 @@ private:
     int s;
     
 public:
-    TriMatrix(double v,int s){
-        diagm = new double [s];
-        diagu = new double [s-1];
-        diagl = new double [s-1];
+    TriMatrix(double v,int S){
+        diagm = new double [S];
+        diagu = new double [S-1];
+        diagl = new double [S-1];
         
         //create diagm vector
         diagm[0]=1;
-        diagm[s-1]=1;
-        for (int i=1;i<s-1;i++){
+        diagm[S-1]=1;
+        for (int i=1;i<S-1;i++){
             diagm[i]=1-2*v;
         }
         
         //create diagu vector
         diagu[0]=0;
-        for (int i=1;i<s-1;i++){
+        for (int i=1;i<S-1;i++){
             diagu[i]=v;
         }
         
         //create diagl vector
-        diagl[s-2]=0;
-        for (int i=0;i<s-2;i++){
+        diagl[S-2]=0;
+        for (int i=0;i<S-2;i++){
             diagl[i]=v;
         }
-        
+        s=S;
     }
     
     //Operator Overload: Calculate Multiplication of TriMatrix to Vector X
-    double operator* (double *X){
+    double *operator* (double *X){
         
         //diagm multiply X
         double Am[s];
@@ -74,14 +74,15 @@ public:
         
         //Superposition of Results
         double *B;
+        B=new double [s];
         for (int i=0;i<s;i++){
             B[i]=Am[i]+Au[i]+Al[i];
         }
-        return *B;
+        return B;
     }
     
     //Operator Overload: Matrix-Vector Solve Operation
-    double operator/ (double *B){
+    double *operator/ (double *B){
         double M[s];
         double U[s];
         double L[s];
@@ -97,15 +98,15 @@ public:
             B[i]=B[i]-m*B[i-1];
         }
         //Calculate Xn
-        double *X[s];
+        double *X;
+        X=new double [s];
         X[s-1]=B[s-1]/M[s-1];
         
         //Backward Substitution
         for (int i=s-2;i>=0;i--){
             X[i]=(B[i]-U[i]*X[i+1])/M[i];
         }
-        
-        return *X;
+        return X;
     }
     
 };

@@ -17,7 +17,7 @@ int main() {
     
     // INPUTS
     double L=1;
-    double Nx=20;
+    int Nx=20;
     double T=5;
     double Nt=5000;
     double alpha=1;
@@ -28,31 +28,34 @@ int main() {
     double v=alpha*dt/pow(dx,2);
     
     // X-POSIION VECTOR
-    vector <double> x(Nx+1);
+    double *x;
+    x=new double[Nx+1];
     for (int i=0;i<Nx+1;i++){
         x[i]=0+i*dx;
     }
     
     //INITIAL CONDITION
-    vector <double> u0(x.size());
+    double *u0;
+    u0=new double[Nx+1];
     u0[1]=0;
-    u0[x.size()]=0;
-    for (int i=1;i<x.size()-1;i++){
+    u0[Nx+1]=0;
+    for (int i=1;i<Nx;i++){
         u0[i]=x[i]*(1-x[i]);
     }
     
     //IMPLICIT TIME INTEGRATION
     double arg=0.5;
-    TriMatrix ML(-arg*v,x.size());
-    TriMatrix MR((1-arg)*v,x.size());
-    vector <double> u0new(x.size());
+    TriMatrix ML(-arg*v,Nx+1);
+    TriMatrix MR((1-arg)*v,Nx+1);
+    double *u0new;
+    u0new=new double[Nx+1];
     for (int i=0;i<Nt;i++){
         u0new=ML/(MR*u0);
         u0=u0new;
     }
     
     //OUTPUT RESULTS
-    for (int i=0;i<x.size();i++){
+    for (int i=0;i<Nx+1;i++){
         cout<<u0new[i]<<endl;
     }
     
