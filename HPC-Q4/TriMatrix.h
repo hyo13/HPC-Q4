@@ -19,7 +19,7 @@ using namespace std;
 class TriMatrix{
     
 private:
-    double *diagm, *diagu, *diagl;
+    double *diagm, *diagu, *diagl, *A;
     int s;
     
 public:
@@ -47,65 +47,40 @@ public:
             diagl[i]=v;
         }
         s=S;
+        
+        //Convert all column vectors of TriMatrix into array A
+        A=new double [s*s];
+        //First column vector
+        A[0]=diagm[0];
+        A[1]=diagl[0];
+        //Intermediate column vectors
+        for (int i=1;i<s-1;i++){
+            A[s*i+i-1]=diagu[i-1];
+            A[s*i+i]=diagm[i];
+            A[s*i+i+1]=diagl[i];
+        }
+        //Last column vector
+        A[s*s-2]=diagu[s-2];
+        A[s*s-1]=diagm[s-1];
     }
     
     //Operator Overload: Calculate Multiplication of TriMatrix to Vector X
     double *operator* (double *X){
+        double B[s];
+        double alpha=1;
+        double beta=1;
         
-        //diagm multiply X
-        double Am[s];
-        for (int i=0;i<s;i++){
-            Am[i]=diagm[i]*X[i];
-        }
-        
-        //diagu multiply X
-        double Au[s];
-        for (int i=0;i<s-1;i++){
-            Au[i]=diagu[i]*X[i+1];
-        }
-        Au[s-1]=0;
-        
-        //diagl multiply X
-        double Al[s];
-        Al[0]=0;
-        for (int i=1;i<s;i++){
-            Al[i]=diagl[i-1]*X[i-1];
-        }
-        
-        //Superposition of Results
-        double *B;
-        B=new double [s];
-        for (int i=0;i<s;i++){
-            B[i]=Am[i]+Au[i]+Al[i];
-        }
+        cblas_dgemv(CblasColMajor,CblasNoTrans,s,s,alpha,A,s,X,1,beta,B,1);
         return B;
     }
     
     //Operator Overload: Matrix-Vector Solve Operation
     double *operator/ (double *B){
-        double M[s];
-        double U[s];
-        double L[s];
-        copy(diagm,diagm+s,M);
-        copy(diagu,diagu+s,U);
-        copy(diagl,diagl+s,L);
         
+        //LU Decomposition of TriMatrix
+        dgttrf
         
-        //Forward Elimination
-        for (int i=1;i<s;i++){
-            double m=L[i-1]/M[i-1];
-            M[i]=M[i]-m*U[i-1];
-            B[i]=B[i]-m*B[i-1];
-        }
-        //Calculate Xn
-        double *X;
-        X=new double [s];
-        X[s-1]=B[s-1]/M[s-1];
-        
-        //Backward Substitution
-        for (int i=s-2;i>=0;i--){
-            X[i]=(B[i]-U[i]*X[i+1])/M[i];
-        }
+        dgttrs
         return X;
     }
     
