@@ -19,7 +19,7 @@ int main() {
     double L=1;
     int Nx=10000;
     double T=0.01;
-    double Nt=3000;
+    double Nt=10000;
     double alpha=0.001;
     
     //calculate minimum input time step for Forward Euler to converge with v = or < 0.5
